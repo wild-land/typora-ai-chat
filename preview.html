@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typora AI Chat Plugin - 预览</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #1e1e2e;
+            color: #cdd6f4;
+            min-height: 100vh;
+        }
+
+        /* 模拟 Typora 编辑区域 */
+        #write {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            min-height: 100vh;
+            background: #1e1e2e;
+            outline: none;
+        }
+
+        #write h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #cdd6f4;
+            border-bottom: 1px solid #313244;
+            padding-bottom: 10px;
+        }
+
+        #write h2 {
+            font-size: 1.5em;
+            margin: 30px 0 15px;
+            color: #cdd6f4;
+        }
+
+        #write p {
+            line-height: 1.8;
+            margin: 15px 0;
+            color: #a6adc8;
+        }
+
+        #write code {
+            background: #313244;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            color: #89b4fa;
+        }
+
+        #write pre {
+            background: #11111b;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        #write pre code {
+            background: none;
+            padding: 0;
+            color: #cdd6f4;
+        }
+
+        #write ul,
+        #write ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        #write li {
+            line-height: 1.8;
+            margin: 8px 0;
+        }
+
+        #write blockquote {
+            border-left: 3px solid #89b4fa;
+            padding-left: 16px;
+            margin: 20px 0;
+            color: #a6adc8;
+        }
+
+        /* 顶部提示栏 */
+        .preview-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #89b4fa, #b4befe);
+            color: #1e1e2e;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 0;
+            font-size: 14px;
+        }
+
+        .preview-header strong {
+            font-weight: 600;
+        }
+
+        .preview-header .hint {
+            opacity: 0.8;
+        }
+
+        .preview-header kbd {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        /* 调整内容区域避开顶部栏 */
+        #write {
+            padding-top: 100px;
+        }
+
+        /* 亮色主题切换 */
+        body.light {
+            background: #ffffff;
+        }
+
+        body.light #write {
+            background: #ffffff;
+            color: #333333;
+        }
+
+        body.light #write h1,
+        body.light #write h2 {
+            color: #333333;
+            border-bottom-color: #e0e0e0;
+        }
+
+        body.light #write p {
+            color: #666666;
+        }
+
+        body.light #write code {
+            background: #f0f0f0;
+            color: #1976d2;
+        }
+
+        body.light #write pre {
+            background: #f8f8f8;
+        }
+
+        body.light #write pre code {
+            color: #333333;
+        }
+
+        body.light #write blockquote {
+            border-left-color: #1976d2;
+        }
+
+        .theme-toggle {
+            background: rgba(0, 0, 0, 0.2);
+            border: none;
+            color: inherit;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 预览提示栏 -->
+    <div class="preview-header">
+        <div>
+            <strong>🚀 Typora AI Chat Plugin 预览</strong>
+            <span class="hint"> — 按 <kbd>Ctrl+Shift+A</kbd> 或点击右下角按钮打开面板</span>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()">切换主题</button>
+    </div>
+
+    <!-- 模拟 Typora 编辑区域 -->
+    <div id="write" contenteditable="true">
+        <h1>Typora AI Chat Plugin</h1>
+
+        <p>这是一个模拟 Typora 编辑环境的预览页面，用于测试 AI 聊天插件的效果。</p>
+
+        <h2>功能特性</h2>
+
+        <ul>
+            <li><strong>右侧滑出式面板</strong> - 不干扰编辑体验</li>
+            <li><strong>流式输出</strong> - 实时显示 AI 响应</li>
+            <li><strong>Markdown 渲染</strong> - 完美展示代码、列表、表格</li>
+            <li><strong>同步到编辑器</strong> - 一键将代码块插入文档</li>
+            <li><strong>暗色/亮色主题</strong> - 自动适配</li>
+            <li><strong>拖拽调整宽度</strong> - 自由调整面板大小</li>
+        </ul>
+
+        <h2>使用方法</h2>
+
+        <p>点击右下角的 AI 按钮，或按 <code>Ctrl+Shift+A</code> 打开聊天面板。</p>
+
+        <blockquote>
+            <p>提示：首次使用请在设置中配置 API Key</p>
+        </blockquote>
+
+        <h2>示例代码</h2>
+
+        <pre><code>// 通过 API 调用插件
+window.aiChatPlugin.toggle();     // 打开/关闭面板
+window.aiChatPlugin.send('你好'); // 发送消息
+window.aiChatPlugin.clear();      // 清空对话</code></pre>
+
+        <p>你可以在这里自由编辑内容，测试 AI 回复的代码块同步功能。</p>
+    </div>
+
+    <!-- 加载插件 -->
+    <script src="dist/aiChat.js"></script>
+
+    <script>
+        // 主题切换
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            // 通知插件主题变化（如果有相关API）
+        }
+
+        // 模拟 Typora 的 File.editor API（用于同步功能测试）
+        window.File = {
+            editor: {
+                insertText: function (text) {
+                    const editor = document.getElementById('write');
+                    const selection = window.getSelection();
+
+                    if (selection.rangeCount > 0) {
+                        const range = selection.getRangeAt(0);
+
+                        // 创建一个包含文本的元素
+                        const div = document.createElement('div');
+                        div.innerHTML = text.replace(/\n/g, '<br>').replace(/```(\w*)<br>([\s\S]*?)```<br>/g, '<pre><code>$2</code></pre>');
+
+                        range.deleteContents();
+                        range.insertNode(div);
+
+                        // 移动光标
+                        range.setStartAfter(div);
+                        range.setEndAfter(div);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    } else {
+                        editor.innerHTML += text.replace(/\n/g, '<br>');
+                    }
+
+                    console.log('[Preview] 已插入内容到编辑器');
+                }
+            }
+        };
+
+        console.log('📝 预览页面已加载');
+        console.log('💡 提示: 按 Ctrl+Shift+A 或点击右下角按钮打开 AI 聊天面板');
+    </script>
+</body>
+
+</html>
